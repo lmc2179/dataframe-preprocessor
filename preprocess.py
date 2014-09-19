@@ -33,7 +33,16 @@ class AbstractPreprocessor(object):
         return self.cache.get(key)
 
 class AbstractRowCachePreprocessor(AbstractPreprocessor):
-    "A cache class which performs caching by row. Assumes that each row has an ID column."
+    """A cache class which performs caching by row. Assumes that each row has an ID column.
+
+    This should be used when a row's ID alone is enough to identify its transformed value."""
+    pass
+
+class AbstractFrameCachePreprocessor(AbstractPreprocessor):
+    """A cache class which performs caching for an entire set of IDs. Assumes that each row has an ID column.
+
+    This should be used when the full set of IDs is needed to properly retrieve the data,
+    rather than just row information."""
     pass
 
 
