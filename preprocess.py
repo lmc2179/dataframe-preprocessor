@@ -46,7 +46,7 @@ class AbstractFrameCachePreprocessor(AbstractPreprocessor):
         self.cache_columns = None
 
     def _cache_transform(self, data):
-        sorted_ids = tuple(sorted(data.index))
+        sorted_ids = self._get_unique_identifier(data)
         # Get subset, flatten and push to disk
         flattened_data = self._extract_flattened_data(data)
         self._cache_value(sorted_ids, flattened_data)
@@ -57,7 +57,7 @@ class AbstractFrameCachePreprocessor(AbstractPreprocessor):
         return flattened_data
 
     def _get_cached_transform(self, data):
-        sorted_ids = tuple(sorted(data.index))
+        sorted_ids = self._get_unique_identifier(data)
         # Retrieve from disk, unflatten, and combine with data
         flattened_data = self._get_cached_value(sorted_ids)
         if not flattened_data:
@@ -67,3 +67,6 @@ class AbstractFrameCachePreprocessor(AbstractPreprocessor):
 
     def _flattened_data_to_dataframe(self, flattened_data):
         return pd.DataFrame(dict(flattened_data))
+
+    def _get_unique_identifier(self, data):
+        return self.__class__.__name__+'|'+','.join(sorted(data.index))
